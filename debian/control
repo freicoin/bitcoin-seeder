@@ -1,0 +1,29 @@
+Source: bitcoin-seeder
+Section: network
+Priority: optional
+Maintainer: Pieter Wuille
+Uploaders: Mark Friedenbach <mark@monetize.io>
+Build-Depends: debhelper (>= 8.0.0),
+ libboost-dev (>> 1.35) | libboost1.35-dev,
+ libssl-dev (>> 0.9.8) | libssl0.9.8-dev
+Standards-Version: 3.9.2
+Homepage: https://github.com/sipa/bitcoin-seeder
+Vcs-Git: git://github.com/sipa/bitcoin-seeder.git
+Vcs-Browser: https://github.com/sipa/bitcoin-seeder
+
+Package: bitcoin-dnsseed
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Exposes a reliable Bitcoin nodes via a built-in DNS server
+ Bitcoin-seeder is a crawler for the Bitcoin network, which exposes a list
+ of reliable nodes via a built-in DNS server.
+ .
+ Features:
+ * Regularly revisits known nodes to check their availability.
+ * Bans nodes after enough failures, or bad behavior.
+ * Accepts nodes down to v0.3.19 to request new IP addresses from,
+   but only reports good post-v0.3.24 nodes.
+ * Keeps statistics over (exponential) windows of 2 hours, 8 hours,
+   1 day and 1 week, to base decisions on.
+ * Very low memory (a few tens of megabytes) and cpu requirements.
+ * Crawlers run in parallel (by default 24 threads simultaneously).
