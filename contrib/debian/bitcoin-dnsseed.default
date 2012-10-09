@@ -1,6 +1,6 @@
-# Defaults for bitcoin-seeder initscript
-# sourced by /etc/init.d/bitcoin-seeder
-# installed at /etc/default/bitcoin-seeder by the maintainer scripts
+# Defaults for bitcoin-dnsseed initscript
+# sourced by /etc/init.d/bitcoin-dnsseed
+# installed at /etc/default/bitcoin-dnsseed by the maintainer scripts
 
 #
 # This is a POSIX shell fragment

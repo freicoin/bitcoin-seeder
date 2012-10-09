@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          bitcoin-seeder
+# Provides:          bitcoin-dnsseed
 # Required-Start:    $network $local_fs
 # Required-Stop:
 # Default-Start:     2 3 4 5
@@ -15,9 +15,9 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC=bitcoin-seeder             # Introduce a short description here
-NAME=bitcoin-seeder             # Introduce the short server's name here
-DAEMON=/usr/lib/bitcoin/dnsseed # Introduce the server's location here
+DESC=bitcoin-dnsseed             # Introduce a short description here
+NAME=bitcoin-dnsseed             # Introduce the short server's name here
+DAEMON=/usr/lib/bitcoin/dnsseed  # Introduce the server's location here
 DAEMON_ARGS=""             # Arguments to run the daemon with
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME

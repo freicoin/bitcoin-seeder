@@ -1,4 +1,4 @@
-Source: bitcoin-seeder
+Source: bitcoin-dnsseed
 Section: network
 Priority: optional
 Maintainer: Pieter Wuille
@@ -15,7 +15,7 @@ Package: bitcoin-dnsseed
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Exposes a reliable Bitcoin nodes via a built-in DNS server
- Bitcoin-seeder is a crawler for the Bitcoin network, which exposes a list
+ Bitcoin-dnsseed is a crawler for the Bitcoin network, which exposes a list
  of reliable nodes via a built-in DNS server.
  .
  Features:
