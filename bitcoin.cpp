@@ -7,7 +7,7 @@
 #include "uint256.h"
 
 #define BITCOIN_SEED_NONCE  0x0539a019ca550825
-#define REQUIRE_HEIGHT 140700
+#define REQUIRE_HEIGHT 0
 #define MIN_VERSION 40000
 
 using namespace std;
