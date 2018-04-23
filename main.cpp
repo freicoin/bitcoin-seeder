@@ -52,6 +52,7 @@ public:
                               "-i <ip:port>    IPV4 SOCKS5 proxy IP/Port\n"
                               "-k <ip:port>    IPV6 SOCKS5 proxy IP/Port\n"
                               "-b <p2port>     Default P2P port for peers (default 8333 or 18333)\n"
+                              "-x <magic>      Magic string/network prefix (default\n"
                               "-w f1,f2,...    Allow these flag combinations as filters\n"
                               "--testnet       Use testnet\n"
                               "--wipeban       Wipe list of banned nodes\n"
@@ -73,6 +74,7 @@ public:
         {"proxyipv4", required_argument, 0, 'i'},
         {"proxyipv6", required_argument, 0, 'k'},
         {"p2port", required_argument, 0, 'b'},
+        {"magic", required_argument, 0, 'x'},
         {"filter", required_argument, 0, 'w'},
         {"testnet", no_argument, &fUseTestNet, 1},
         {"wipeban", no_argument, &fWipeBan, 1},
@@ -81,7 +83,7 @@ public:
         {0, 0, 0, 0}
       };
       int option_index = 0;
-      int c = getopt_long(argc, argv, "s:h:n:m:t:p:d:o:i:k:w:b:", long_options, &option_index);
+      int c = getopt_long(argc, argv, "s:h:n:m:t:p:d:o:i:k:w:b:x:", long_options, &option_index);
       if (c == -1) break;
       switch (c) {
         case 's': {
@@ -140,6 +142,19 @@ public:
         case 'b': {
           int p = strtol(optarg, NULL, 10);
           if (p > 0 && p < 65536) nDefaultPort = (unsigned short)p;
+          break;
+        }
+
+        case 'x': {
+          long long int n;
+          char *endptr;
+          n = strtoll(optarg, &endptr, 16);
+          if (endptr && (*endptr == '\0') && (0LL <= n) && (n <= 0xffffffffLL)) {
+            pchMessageStart[3] = static_cast<unsigned char>(n & 0xff); n >>= 8;
+            pchMessageStart[2] = static_cast<unsigned char>(n & 0xff); n >>= 8;
+            pchMessageStart[1] = static_cast<unsigned char>(n & 0xff); n >>= 8;
+            pchMessageStart[0] = static_cast<unsigned char>(n);
+          }
           break;
         }
 
