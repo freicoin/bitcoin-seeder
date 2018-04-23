@@ -16,6 +16,8 @@ using namespace std;
 
 bool fTestNet = false;
 
+static std::vector<std::string> seeds;
+
 class CDnsSeedOpts {
 public:
   int nThreads;
@@ -39,6 +41,7 @@ public:
                               "Usage: %s -h <host> -n <ns> [-m <mbox>] [-t <threads>] [-p <port>]\n"
                               "\n"
                               "Options:\n"
+                              "-s <seed>       Seed node to collect peers from (replaces default)\n"
                               "-h <host>       Hostname of the DNS seed\n"
                               "-n <ns>         Hostname of the nameserver\n"
                               "-m <mbox>       E-Mail address reported in SOA records\n"
@@ -58,6 +61,7 @@ public:
 
     while(1) {
       static struct option long_options[] = {
+        {"seed", required_argument, 0, 's'},
         {"host", required_argument, 0, 'h'},
         {"ns",   required_argument, 0, 'n'},
         {"mbox", required_argument, 0, 'm'},
@@ -75,9 +79,14 @@ public:
         {0, 0, 0, 0}
       };
       int option_index = 0;
-      int c = getopt_long(argc, argv, "h:n:m:t:p:d:o:i:k:w:", long_options, &option_index);
+      int c = getopt_long(argc, argv, "s:h:n:m:t:p:d:o:i:k:w:", long_options, &option_index);
       if (c == -1) break;
       switch (c) {
+        case 's': {
+          seeds.emplace_back(optarg);
+          break;
+        }
+
         case 'h': {
           host = optarg;
           break;
@@ -397,20 +406,28 @@ extern "C" void* ThreadStats(void*) {
   return nullptr;
 }
 
-static const string mainnet_seeds[] = {"dnsseed.bluematt.me", "bitseed.xf2.org", "dnsseed.bitcoin.dashjr.org", "seed.bitcoin.sipa.be", ""};
-static const string testnet_seeds[] = {"testnet-seed.alexykot.me",
-                                       "testnet-seed.bitcoin.petertodd.org",
-                                       "testnet-seed.bluematt.me",
-                                       "testnet-seed.bitcoin.schildbach.de",
-                                       ""};
-static const string *seeds = mainnet_seeds;
-
 extern "C" void* ThreadSeeder(void*) {
-  if (!fTestNet){
-    db.Add(CService("kjy2eqzk4zwi5zd3.onion", 8333), true);
+  // Fill with defaults if no seeds have been specified on the command line.
+  if (seeds.empty()) {
+    if (!fTestNet) {
+      seeds.emplace_back("dnsseed.bluematt.me");
+      seeds.emplace_back("bitseed.xf2.org");
+      seeds.emplace_back("dnsseed.bitcoin.dashjr.org");
+      seeds.emplace_back("seed.bitcoin.sipa.be");
+      seeds.emplace_back("kjy2eqzk4zwi5zd3.onion");
+    } else {
+      seeds.emplace_back("testnet-seed.alexykot.me");
+      seeds.emplace_back("testnet-seed.bitcoin.petertodd.org");
+      seeds.emplace_back("testnet-seed.bluematt.me");
+      seeds.emplace_back("testnet-seed.bitcoin.schildbach.de");
+    }
   }
   do {
-    for (int i=0; seeds[i] != ""; i++) {
+    for (int i=0; i < seeds.size(); i++) {
+      if (seeds[i].length()>6 && !seeds[i].compare(seeds[i].length()-6, 6, ".onion")) {
+        db.Add(CService(seeds[i], GetDefaultPort()), true);
+        continue;
+      }
       vector<CNetAddr> ips;
       LookupHost(seeds[i].c_str(), ips);
       for (vector<CNetAddr>::iterator it = ips.begin(); it != ips.end(); it++) {
@@ -463,7 +480,6 @@ int main(int argc, char **argv) {
       pchMessageStart[1] = 0x11;
       pchMessageStart[2] = 0x09;
       pchMessageStart[3] = 0x07;
-      seeds = testnet_seeds;
       fTestNet = true;
   }
   if (!opts.ns) {
