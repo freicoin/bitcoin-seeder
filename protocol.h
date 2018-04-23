@@ -16,9 +16,14 @@
 #include "uint256.h"
 
 extern bool fTestNet;
+// This should really be part of the CDnsSeedOpts object, but that would
+// require some code reorganization that isn't really justified given that
+// there is never more than one configuration anyway.
+extern unsigned short nDefaultPort;
 static inline unsigned short GetDefaultPort(const bool testnet = fTestNet)
 {
-    return testnet ? 18333 : 8333;
+    return (::nDefaultPort > 0) ? (::nDefaultPort)
+                                : (testnet ? 18333 : 8333);
 }
 
 //

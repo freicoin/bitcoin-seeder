@@ -24,6 +24,8 @@ static const char* ppszTypeName[] =
 
 unsigned char pchMessageStart[4] = { 0xf9, 0xbe, 0xb4, 0xd9 };
 
+unsigned short nDefaultPort = 0;
+
 CMessageHeader::CMessageHeader()
 {
     memcpy(pchMessageStart, ::pchMessageStart, sizeof(pchMessageStart));

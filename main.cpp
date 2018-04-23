@@ -51,6 +51,7 @@ public:
                               "-o <ip:port>    Tor proxy IP/Port\n"
                               "-i <ip:port>    IPV4 SOCKS5 proxy IP/Port\n"
                               "-k <ip:port>    IPV6 SOCKS5 proxy IP/Port\n"
+                              "-b <p2port>     Default P2P port for peers (default 8333 or 18333)\n"
                               "-w f1,f2,...    Allow these flag combinations as filters\n"
                               "--testnet       Use testnet\n"
                               "--wipeban       Wipe list of banned nodes\n"
@@ -71,6 +72,7 @@ public:
         {"onion", required_argument, 0, 'o'},
         {"proxyipv4", required_argument, 0, 'i'},
         {"proxyipv6", required_argument, 0, 'k'},
+        {"p2port", required_argument, 0, 'b'},
         {"filter", required_argument, 0, 'w'},
         {"testnet", no_argument, &fUseTestNet, 1},
         {"wipeban", no_argument, &fWipeBan, 1},
@@ -79,7 +81,7 @@ public:
         {0, 0, 0, 0}
       };
       int option_index = 0;
-      int c = getopt_long(argc, argv, "s:h:n:m:t:p:d:o:i:k:w:", long_options, &option_index);
+      int c = getopt_long(argc, argv, "s:h:n:m:t:p:d:o:i:k:w:b:", long_options, &option_index);
       if (c == -1) break;
       switch (c) {
         case 's': {
@@ -132,6 +134,12 @@ public:
 
         case 'k': {
           ipv6_proxy = optarg;
+          break;
+        }
+
+        case 'b': {
+          int p = strtol(optarg, NULL, 10);
+          if (p > 0 && p < 65536) nDefaultPort = (unsigned short)p;
           break;
         }
 
