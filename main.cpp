@@ -53,6 +53,7 @@ public:
                               "-k <ip:port>    IPV6 SOCKS5 proxy IP/Port\n"
                               "-b <p2port>     Default P2P port for peers (default 8333 or 18333)\n"
                               "-x <magic>      Magic string/network prefix (default\n"
+                              "-y <height>     Required height of chain for consideration\n"
                               "-w f1,f2,...    Allow these flag combinations as filters\n"
                               "--testnet       Use testnet\n"
                               "--wipeban       Wipe list of banned nodes\n"
@@ -75,6 +76,7 @@ public:
         {"proxyipv6", required_argument, 0, 'k'},
         {"p2port", required_argument, 0, 'b'},
         {"magic", required_argument, 0, 'x'},
+        {"height", required_argument, 0, 'y'},
         {"filter", required_argument, 0, 'w'},
         {"testnet", no_argument, &fUseTestNet, 1},
         {"wipeban", no_argument, &fWipeBan, 1},
@@ -83,7 +85,7 @@ public:
         {0, 0, 0, 0}
       };
       int option_index = 0;
-      int c = getopt_long(argc, argv, "s:h:n:m:t:p:d:o:i:k:w:b:x:", long_options, &option_index);
+      int c = getopt_long(argc, argv, "s:h:n:m:t:p:d:o:i:k:w:b:x:y:", long_options, &option_index);
       if (c == -1) break;
       switch (c) {
         case 's': {
@@ -155,6 +157,15 @@ public:
             pchMessageStart[1] = static_cast<unsigned char>(n & 0xff); n >>= 8;
             pchMessageStart[0] = static_cast<unsigned char>(n);
           }
+          break;
+        }
+
+        case 'y': {
+          long int n;
+          char *endptr;
+          n = strtol(optarg, &endptr, 10);
+          if (endptr && (*endptr == '\0') && (0L <= n) && (n <= INT_MAX))
+            nRequiredHeight = static_cast<int>(n);
           break;
         }
 
