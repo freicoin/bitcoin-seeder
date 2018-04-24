@@ -23,7 +23,7 @@ extern unsigned short nDefaultPort;
 static inline unsigned short GetDefaultPort(const bool testnet = fTestNet)
 {
     return (::nDefaultPort > 0) ? (::nDefaultPort)
-                                : (testnet ? 18333 : 8333);
+                                : (testnet ? 18639 : 8639);
 }
 
 //

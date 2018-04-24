@@ -444,16 +444,9 @@ extern "C" void* ThreadSeeder(void*) {
   // Fill with defaults if no seeds have been specified on the command line.
   if (seeds.empty()) {
     if (!fTestNet) {
-      seeds.emplace_back("dnsseed.bluematt.me");
-      seeds.emplace_back("bitseed.xf2.org");
-      seeds.emplace_back("dnsseed.bitcoin.dashjr.org");
-      seeds.emplace_back("seed.bitcoin.sipa.be");
-      seeds.emplace_back("kjy2eqzk4zwi5zd3.onion");
+      seeds.emplace_back("mainnet.freico.in");
     } else {
-      seeds.emplace_back("testnet-seed.alexykot.me");
-      seeds.emplace_back("testnet-seed.bitcoin.petertodd.org");
-      seeds.emplace_back("testnet-seed.bluematt.me");
-      seeds.emplace_back("testnet-seed.bitcoin.schildbach.de");
+      seeds.emplace_back("testnet.freico.in");
     }
   }
   do {
@@ -510,10 +503,10 @@ int main(int argc, char **argv) {
   bool fDNS = true;
   if (opts.fUseTestNet) {
       printf("Using testnet.\n");
-      pchMessageStart[0] = 0x0b;
-      pchMessageStart[1] = 0x11;
-      pchMessageStart[2] = 0x09;
-      pchMessageStart[3] = 0x07;
+      pchMessageStart[0] = 0x5e;
+      pchMessageStart[1] = 0xd6;
+      pchMessageStart[2] = 0x7c;
+      pchMessageStart[3] = 0xf3;
       fTestNet = true;
   }
   if (!opts.ns) {
